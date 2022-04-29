@@ -65,7 +65,6 @@ public class Sketch extends PApplet {
 
     image(imgBackground, 0, 0);
     game();
-    keyPressed();
 
 	// sample code, delete this stuff
   
@@ -104,18 +103,20 @@ public class Sketch extends PApplet {
       }
     }
 
-    
-    
-
-
     // Collission detection with blue paddle and wall
     if (fltBluePaddleX < 0  || fltBluePaddleX > width - 104){
       fltBluePaddleSpeed *= -1;
     }
     // draw and animate red paddle
     image(imgRedPaddle, fltRedPaddleX, fltRedPaddleY);
-    fltRedPaddleX += fltRedPaddleSpeed;
-    fltRedPaddleY = ((fltRedPaddleX - 400) * (fltRedPaddleX - 400)) / 800 + 700;
+    if (keyPressed){
+      if (key == 'a'){
+        fltRedPaddleX += -12;
+      }
+      if (key == 'd'){
+        fltRedPaddleX += 12;
+      }
+    }
     
     // Collission detection of red paddle and wall
     if (fltRedPaddleX < 0 || fltRedPaddleX > width - 104){
@@ -128,7 +129,6 @@ public class Sketch extends PApplet {
         if (fltRedPaddleSpeed < 0 ){
           fltCirSpeedX = -5;
           fltCirSpeedY *= -1;
-          
         }
         if (fltRedPaddleSpeed > 0){
           fltCirSpeedX = 5;
