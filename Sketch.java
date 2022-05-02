@@ -6,27 +6,28 @@ import java.util.Random;
 public class Sketch extends PApplet {
    Random rand = new Random();
 
-
-
-	
    // Image variables
    PImage imgBluePaddle;
    PImage imgRedPaddle;
    PImage imgBackground;
    
    // ball speed, size and random location variables
-   float fltCirSpeedY = 20;
-   float fltCirSpeedX = 10;
+   float fltCirSpeedY = 12;
+   float fltCirSpeedX = 6;
  
    int intCircleX = rand.nextInt(720);
    int intCircleY = rand.nextInt(960);
  
    int intCircleSize = 25;
+
+   int ballColorOne = 255;
+   int ballColorTwo = 255;
+   int ballColorThree = 255;
  
    // paddle location and speed variables
    float fltBluePaddleX = 200;
    float fltBluePaddleY = 100;
-   float fltBluePaddleSpeed = 0;
+   float fltBluePaddleSpeed = 10;
    boolean boolBluePaddleLeft = false;
    boolean boolBluePaddleRight = false;
    
@@ -34,6 +35,8 @@ public class Sketch extends PApplet {
    float fltRedPaddleX = 235;
    float fltRedPaddleY = 700;
    float fltRedPaddleSpeed = 10;
+   boolean boolRedPaddleLeft = false;
+   boolean boolRedPaddleRight = false; 
    
    // Score counter variables
    int intScoreRed = 0;
@@ -62,17 +65,15 @@ public class Sketch extends PApplet {
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
-
     image(imgBackground, 0, 0);
     game();
-
 	// sample code, delete this stuff
-  
   }
 
-
   public void game(){
+
     // draw and animate ball
+    fill(ballColorOne, ballColorTwo, ballColorThree);
     ellipse(intCircleX, intCircleY, intCircleSize, intCircleSize);
     intCircleY += fltCirSpeedY;
     intCircleX += fltCirSpeedX;
@@ -94,13 +95,15 @@ public class Sketch extends PApplet {
 
     // draw and animate blue paddle
     image(imgBluePaddle, fltBluePaddleX, fltBluePaddleY);
-    if (keyPressed){
-      if (keyCode == LEFT){
-        fltBluePaddleX += -12;
-      }
-      if (keyCode == RIGHT){
-        fltBluePaddleX += 12;
-      }
+    if (boolBluePaddleRight){
+      fltBluePaddleX += 15;
+      fltBluePaddleSpeed = 20;
+
+    }
+    if (boolBluePaddleLeft){
+      fltBluePaddleX -= 15;
+      fltBluePaddleSpeed = -20;
+
     }
 
     // Collission detection with blue paddle and wall
@@ -109,15 +112,16 @@ public class Sketch extends PApplet {
     }
     // draw and animate red paddle
     image(imgRedPaddle, fltRedPaddleX, fltRedPaddleY);
-    if (keyPressed){
-      if (key == 'a'){
-        fltRedPaddleX += -12;
-      }
-      if (key == 'd'){
-        fltRedPaddleX += 12;
-      }
+    if (boolRedPaddleRight){
+      fltRedPaddleX += 15;
+      fltRedPaddleSpeed = 20;
     }
     
+    if (boolRedPaddleLeft){
+      fltRedPaddleX -= 15;
+      fltRedPaddleSpeed = -20;
+    }
+  
     // Collission detection of red paddle and wall
     if (fltRedPaddleX < 0 || fltRedPaddleX > width - 104){
       fltRedPaddleSpeed *= -1;
@@ -126,6 +130,9 @@ public class Sketch extends PApplet {
     // Collission detection of red paddle and ball
     if (intCircleX > fltRedPaddleX && intCircleX < fltRedPaddleX + 104){
       if (intCircleY > fltRedPaddleY -12 && intCircleY < fltRedPaddleY + 36){
+        if (fltRedPaddleSpeed == 0){
+          fltCirSpeedY *= -1;
+        }
         if (fltRedPaddleSpeed < 0 ){
           fltCirSpeedX = -5;
           fltCirSpeedY *= -1;
@@ -133,7 +140,6 @@ public class Sketch extends PApplet {
         if (fltRedPaddleSpeed > 0){
           fltCirSpeedX = 5;
           fltCirSpeedY *= -1;
-          
         }
         if (intCircleY > fltRedPaddleY + 12){
           intCircleY += 20;
@@ -143,6 +149,7 @@ public class Sketch extends PApplet {
       }
     }
   }
+
     // Collision detection of blue paddle and ball
     if (intCircleX > fltBluePaddleX && intCircleX < fltBluePaddleX + 104){
       if (intCircleY > fltBluePaddleY -12 && intCircleY < fltBluePaddleY + 36){
@@ -152,15 +159,10 @@ public class Sketch extends PApplet {
         if (fltBluePaddleSpeed < 0){
           fltCirSpeedX = -5;
           fltCirSpeedY *= -1;
-          fltBluePaddleY = rand.nextInt(480);
-          fltBluePaddleX = rand.nextInt(600);
-          
         }
         if (fltBluePaddleSpeed > 0){
           fltCirSpeedX = 5;
           fltCirSpeedY *= -1;
-          fltBluePaddleY = rand.nextInt(480);
-          fltBluePaddleX = rand.nextInt(600);
         }
         if (intCircleY > fltBluePaddleY + 12){
           intCircleY += 20;
@@ -176,7 +178,55 @@ public class Sketch extends PApplet {
     fill(255,255,255);
     text(intScoreRed, 340, 550);
     text(intScoreBlue, 340, 430);
+
+    if (mousePressed) {
+      ballColorOne = rand.nextInt(255);
+      ballColorTwo = rand.nextInt(255);
+      ballColorThree = rand.nextInt(255);
+    }
   }
+  
+  public void mouseDragged(){
+    intCircleX = mouseX;
+    intCircleY = mouseY;
+  }
+  
+  public void keyPressed(){
+    if (keyCode == LEFT){
+      boolBluePaddleLeft = true;
+    }
+    if (keyCode == RIGHT){
+      boolBluePaddleRight = true;
+      
+    }
+    if (key == 'a'){
+      boolRedPaddleLeft = true;
+  
+    }
+    if (key == 'd'){
+      boolRedPaddleRight = true;
+      
+    }
+  }
+ public void keyReleased(){
+   if (keyCode == LEFT){
+     boolBluePaddleLeft = false;
+     
+   }
+   if (keyCode == RIGHT){
+    boolBluePaddleRight = false;
+    
+  }
+  if (key == 'a'){
+    boolRedPaddleLeft = false;
+  }
+  if (key == 'd'){
+    boolRedPaddleRight = false;
+    
+  }
+ }
+
+
  
 
    
