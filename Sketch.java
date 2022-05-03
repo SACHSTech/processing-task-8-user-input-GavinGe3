@@ -2,6 +2,11 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import java.util.Random;
 
+/**
+ * A program that allows two users to play a game of Pong
+ * @author: G. Ge
+ */
+
 
 public class Sketch extends PApplet {
    Random rand = new Random();
@@ -11,7 +16,7 @@ public class Sketch extends PApplet {
    PImage imgRedPaddle;
    PImage imgBackground;
    
-   // ball speed, size and random location variables
+   // ball speed, size, color and random location variables
    float fltCirSpeedY = 12;
    float fltCirSpeedX = 6;
  
@@ -24,14 +29,14 @@ public class Sketch extends PApplet {
    int ballColorTwo = 255;
    int ballColorThree = 255;
  
-   // paddle location and speed variables
+   // paddle location, speed and bool variables
    float fltBluePaddleX = 200;
    float fltBluePaddleY = 100;
    float fltBluePaddleSpeed = 10;
    boolean boolBluePaddleLeft = false;
    boolean boolBluePaddleRight = false;
    
-   // red paddle location and speed variables
+   // red paddle location, speed, and bool variables
    float fltRedPaddleX = 235;
    float fltRedPaddleY = 700;
    float fltRedPaddleSpeed = 10;
@@ -43,7 +48,7 @@ public class Sketch extends PApplet {
    int intScoreBlue = 0;
 	
   /**
-   * Called once at the beginning of execution, put your size all in this method
+   * Called once at the beginning of execution, declare size
    */
   public void settings() {
 	// put your size call here
@@ -51,8 +56,8 @@ public class Sketch extends PApplet {
   }
 
   /** 
-   * Called once at the beginning of execution.  Add initial set up
-   * values here i.e background, stroke, fill etc.
+   * Called once at the beginning of execution.  Contains  initial set up values
+   * 
    */
   public void setup() {
     background(210, 255, 173);
@@ -67,8 +72,13 @@ public class Sketch extends PApplet {
   public void draw() {
     image(imgBackground, 0, 0);
     game();
-	// sample code, delete this stuff
+	
   }
+
+  /**
+   *  A game of pong
+   * 
+   */
 
   public void game(){
 
@@ -98,17 +108,18 @@ public class Sketch extends PApplet {
     if (boolBluePaddleRight){
       fltBluePaddleX += 15;
       fltBluePaddleSpeed = 20;
-
     }
     if (boolBluePaddleLeft){
       fltBluePaddleX -= 15;
       fltBluePaddleSpeed = -20;
-
     }
 
     // Collission detection with blue paddle and wall
-    if (fltBluePaddleX < 0  || fltBluePaddleX > width - 104){
-      fltBluePaddleSpeed *= -1;
+    if (fltBluePaddleX < 0){
+      fltBluePaddleX = 0;
+    }
+    if (fltBluePaddleX > width -104){
+      fltBluePaddleX = width - 104;
     }
     // draw and animate red paddle
     image(imgRedPaddle, fltRedPaddleX, fltRedPaddleY);
@@ -123,8 +134,11 @@ public class Sketch extends PApplet {
     }
   
     // Collission detection of red paddle and wall
-    if (fltRedPaddleX < 0 || fltRedPaddleX > width - 104){
-      fltRedPaddleSpeed *= -1;
+    if (fltRedPaddleX < 0){
+      fltRedPaddleX = 0;
+    }
+    if (fltRedPaddleX > width -104){
+      fltRedPaddleX = width - 104;
     }
 
     // Collission detection of red paddle and ball
@@ -179,65 +193,69 @@ public class Sketch extends PApplet {
     text(intScoreRed, 340, 550);
     text(intScoreBlue, 340, 430);
 
+    // Detects if Mouse pressed and changes the ball color
     if (mousePressed) {
       ballColorOne = rand.nextInt(255);
       ballColorTwo = rand.nextInt(255);
       ballColorThree = rand.nextInt(255);
     }
   }
-  
+
+  /**
+   * If mouse is dragged, attaches ball to mouse cursor
+   */
+
   public void mouseDragged(){
     intCircleX = mouseX;
     intCircleY = mouseY;
+
   }
-  
+  /**
+   * If correct keyPressed, changes boolean values controlling paddle movement for true
+   */
+
   public void keyPressed(){
     if (keyCode == LEFT){
       boolBluePaddleLeft = true;
     }
     if (keyCode == RIGHT){
       boolBluePaddleRight = true;
-      
     }
     if (key == 'a'){
       boolRedPaddleLeft = true;
-  
     }
     if (key == 'd'){
       boolRedPaddleRight = true;
       
     }
   }
+
+  /**
+   * 
+   * If keyReleased, changes boolean values controlling paddle movement to false
+   * 
+   */
+
  public void keyReleased(){
    if (keyCode == LEFT){
      boolBluePaddleLeft = false;
-     
+     fltBluePaddleSpeed = 0;
    }
    if (keyCode == RIGHT){
     boolBluePaddleRight = false;
+    fltBluePaddleSpeed = 0;
     
   }
   if (key == 'a'){
     boolRedPaddleLeft = false;
+    fltRedPaddleSpeed = 0;
   }
   if (key == 'd'){
     boolRedPaddleRight = false;
+    fltRedPaddleSpeed = 0;
     
   }
  }
-
-
- 
-
-   
-  
-
-  
-  
-
-  
-  
-  // define other methods down here.
 }
 
 
