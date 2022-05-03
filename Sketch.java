@@ -7,7 +7,6 @@ import java.util.Random;
  * @author: G. Ge
  */
 
-
 public class Sketch extends PApplet {
    Random rand = new Random();
 
@@ -231,9 +230,7 @@ public class Sketch extends PApplet {
   }
 
   /**
-   * 
    * If keyReleased, changes boolean values controlling paddle movement to false
-   * 
    */
 
  public void keyReleased(){
@@ -253,7 +250,6 @@ public class Sketch extends PApplet {
   if (key == 'd'){
     boolRedPaddleRight = false;
     fltRedPaddleSpeed = 0;
-    
   }
  }
 }
